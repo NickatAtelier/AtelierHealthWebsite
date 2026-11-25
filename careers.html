@@ -142,17 +142,12 @@ p{text-wrap:pretty}
 .rule{border:0;border-top:1px solid var(--cream-300);margin:0}
 
 /* Hero */
-.hero{position:relative;min-height:calc(100vh - 72px);min-height:calc(100svh - 72px);display:flex;flex-direction:column;padding:clamp(56px,9vw,112px) 0 clamp(28px,4vw,40px);overflow:hidden}
+.hero{position:relative;min-height:calc(100vh - 72px);min-height:calc(100svh - 72px);display:flex;flex-direction:column;padding:clamp(56px,9vw,112px) 0;overflow:hidden}
 .hero::after{content:"";position:absolute;right:-12vw;top:50%;width:62vw;height:62vw;max-width:900px;max-height:900px;transform:translateY(-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(163,139,103,.16),rgba(163,139,103,0));pointer-events:none}
 .hero-inner{position:relative;z-index:1;width:100%;margin-top:auto;margin-bottom:auto}
 .hero .h1{max-width:11.5em}
 .hero .lede{max-width:34em}
 .hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:18px 30px;margin-top:40px}
-.disciplines{position:relative;z-index:1;width:100%;margin-top:clamp(56px,8vw,96px)}
-.disciplines ul{display:flex;flex-wrap:wrap;gap:8px 22px;margin:0;padding:0;list-style:none;font-size:10.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--on-black)}
-.disciplines li+li::before{content:"·";margin-right:22px;color:var(--gold)}
-@media (max-width:640px){.disciplines ul{gap:8px 16px}.disciplines li+li::before{display:none}}
-.disciplines .sub{margin-top:8px;font-size:10.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
 
 /* Why */
 .why-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:40px}
@@ -279,10 +274,6 @@ p{text-wrap:pretty}
         <a class="btn" href="#apply">Express Interest</a>
         <a class="text-link" href="#roles">See the roles</a>
       </div>
-    </div>
-    <div class="disciplines wrap" aria-hidden="true">
-      <ul><li>Massage Therapy</li><li>Chiropractic</li><li>Physiotherapy</li><li>Naturopathic Medicine</li></ul>
-      <div class="sub">Now recruiting · Independent contractors</div>
     </div>
   </section>
 
