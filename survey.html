@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>2026 Healthcare Survey — Atélier Health</title>
-<meta name="description" content="Help us build better healthcare. A five-minute, anonymous survey from Atélier Health.">
+<meta name="description" content="Take Kelowna’s healthcare pulse for 2026. A five-minute, anonymous survey from Atélier Health.">
 <link rel="canonical" href="https://atelierhealth.ca/survey">
 <meta name="theme-color" content="#E7E2D6">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Atélier Health">
 <meta property="og:url" content="https://atelierhealth.ca/survey">
-<meta property="og:title" content="Help us build better healthcare.">
+<meta property="og:title" content="Help us create better healthcare.">
 <meta property="og:description" content="A five-minute, anonymous survey from Atélier Health, opening in Kelowna in 2027.">
 <meta property="og:image" content="https://atelierhealth.ca/assets/share.png">
 <meta property="og:image:width" content="1200">
@@ -560,13 +560,13 @@ a.opt.social-tile,.opt.social-tile{flex-direction:column;justify-content:center;
 
   function renderIntro(el) {
     el.appendChild(label('ATÉLIER HEALTH'));
-    el.appendChild(heading('Help us build better healthcare', true));
-    el.appendChild(h('p', { 'class': 'body', text: "We're opening in 2027. Tell us how you look after your health today and what you'd want from us. It takes about 5 minutes, and your answers are anonymous." }));
+    el.appendChild(heading('Help us create better healthcare', true));
+    el.appendChild(h('p', { 'class': 'body', text: "Atélier Health opens in Kelowna in 2027. This is our 2026 pulse on how the city looks after its health. It takes about five minutes, and your answers are anonymous." }));
     el.appendChild(h('div', { 'class': 'actions' }, [primary('Start →', function () {
       if (!S.startedAt) S.startedAt = Date.now();
       goNext();
     })]));
-    return 'Help us build better healthcare.';
+    return 'Help us create better healthcare.';
   }
 
   function renderConcept(el) {
@@ -1104,7 +1104,7 @@ a.opt.social-tile,.opt.social-tile{flex-direction:column;justify-content:center;
 
   function renderThanks(el) {
     el.appendChild(heading('Thank you', true));
-    el.appendChild(h('p', { 'class': 'body', text: 'Your answers help shape what we build. We can’t wait to meet you.' }));
+    el.appendChild(h('p', { 'class': 'body', text: 'Your answers are in. We can’t wait to meet you.' }));
     if (joined) el.appendChild(h('p', { 'class': 'body', text: 'You’re on the list.' }));
     if (investor) el.appendChild(h('p', { 'class': 'body', text: 'We’ll be in touch about investing.' }));
     el.appendChild(h('div', { 'class': 'social' }, [
