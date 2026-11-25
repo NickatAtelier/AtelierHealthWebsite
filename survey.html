@@ -212,6 +212,56 @@ a.opt.social-tile,.opt.social-tile{flex-direction:column;justify-content:center;
 </div>
 <div class="sr-only" id="announce" aria-live="polite" aria-atomic="true"></div>
 
+<script>window.ahOriginNoAuto = true;
+/* Atélier Health — where did this visitor come from? Remembers the first outside source for 90 days. */
+(function () {
+  var KEY = 'ah_origin', DAYS = 90, SELF = /(^|\.)atelierhealth\.ca$/i;
+  function clean(v) { return String(v || '').toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 24); }
+  function fromHost(h) {
+    h = String(h || '').toLowerCase().replace(/^www\./, '');
+    if (!h || SELF.test(h) || h === String(location.hostname).toLowerCase().replace(/^www\./, '')) return '';
+    var map = [
+      [/(^|\.)instagram\.com$/, 'instagram'], [/(^|\.)(facebook\.com|fb\.me|fb\.com|messenger\.com)$/, 'facebook'],
+      [/(^|\.)tiktok\.com$/, 'tiktok'], [/(^|\.)(t\.co|twitter\.com|x\.com)$/, 'x'],
+      [/(^|\.)(linkedin\.com|lnkd\.in)$/, 'linkedin'], [/(^|\.)substack\.com$/, 'substack'],
+      [/(^|\.)reddit\.com$/, 'reddit'], [/(^|\.)threads\.net$/, 'threads'], [/(^|\.)youtube\.com$/, 'youtube'],
+      [/(^|\.)(mail\.google\.com|outlook\.live\.com|outlook\.office\.com|mail\.yahoo\.com)$/, 'email'],
+      [/(^|\.)google\.[a-z.]+$/, 'google'], [/(^|\.)bing\.com$/, 'bing'], [/(^|\.)duckduckgo\.com$/, 'duckduckgo'],
+      [/(^|\.)(chatgpt\.com|openai\.com|perplexity\.ai|claude\.ai)$/, 'ai-search']
+    ];
+    for (var i = 0; i < map.length; i++) if (map[i][0].test(h)) return map[i][1];
+    return clean(h.replace(/\.[a-z]+$/, '').replace(/\./g, '-'));
+  }
+  function detect(skipSrc) {
+    var q; try { q = new URLSearchParams(location.search); } catch (e) { q = { get: function () { return null; } }; }
+    var v = !skipSrc && clean(q.get('src')); if (v) return v;
+    v = clean(q.get('utm_source')); if (v) return v === 'ig' ? 'instagram' : v === 'fb' ? 'facebook' : v;
+    if (q.get('igshid') || q.get('igsh')) return 'instagram';
+    if (q.get('fbclid')) return 'facebook';
+    if (q.get('ttclid')) return 'tiktok';
+    if (q.get('gclid') || q.get('gbraid') || q.get('wbraid')) return 'google-ads';
+    if (q.get('msclkid')) return 'bing-ads';
+    if (q.get('li_fat_id')) return 'linkedin';
+    var ua = navigator.userAgent || '';
+    if (/Instagram/i.test(ua)) return 'instagram';
+    if (/FBAN|FBAV|FB_IAB/i.test(ua)) return 'facebook';
+    if (/musical_ly|BytedanceWebview|TikTok/i.test(ua)) return 'tiktok';
+    if (/LinkedInApp/i.test(ua)) return 'linkedin';
+    try { if (document.referrer) return fromHost(new URL(document.referrer).hostname); } catch (e) {}
+    return '';
+  }
+  function stored() {
+    try {
+      var o = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (o && o.v && Date.now() - o.t < DAYS * 864e5) return o.v;
+    } catch (e) {}
+    return '';
+  }
+  function remember(v) { if (v) try { if (!stored()) localStorage.setItem(KEY, JSON.stringify({ v: v, t: Date.now() })); } catch (e) {} }
+  window.ahOrigin = { detect: detect, stored: stored, remember: remember, clean: clean };
+  if (!window.ahOriginNoAuto) remember(detect(false));
+})();
+</script>
 <script>
 (function () {
   'use strict';
@@ -333,8 +383,22 @@ a.opt.social-tile,.opt.social-tile{flex-direction:column;justify-content:center;
     return h.slice(0, 8) + '-' + h.slice(8, 12) + '-' + h.slice(12, 16) + '-' + h.slice(16, 20) + '-' + h.slice(20);
   }
 
+  // Source: an outside tag or referrer (instagram, google...) plus, for clicks from our own landing page,
+  // where on the page they clicked (hero, nav, waitlist), e.g. "instagram-hero". Untagged visits are "direct".
+  var PLACEMENTS = { hero: 1, nav: 1, waitlist: 1 };
   var urlSource = '';
-  try { urlSource = cleanSource(new URLSearchParams(location.search).get('src')); } catch (e) {}
+  try {
+    var rawSrc = cleanSource(new URLSearchParams(location.search).get('src')).toLowerCase();
+    var O = window.ahOrigin;
+    if (rawSrc && PLACEMENTS[rawSrc]) {
+      urlSource = ((O && (O.stored() || O.detect(true))) || 'direct') + '-' + rawSrc;
+    } else {
+      var outside = rawSrc || (O && O.detect(true)) || '';
+      if (O) O.remember(outside);
+      urlSource = outside || (O && O.stored() ? O.stored() + '-return' : '');
+    }
+    urlSource = cleanSource(urlSource);
+  } catch (e) {}
 
   function fresh() {
     return { version: CONFIG.version, id: uuid(), step: 'intro', answers: {}, other: {}, startedAt: 0, email: '', consent: false, investEmail: '', investConsent: false, source: urlSource || 'direct' };
